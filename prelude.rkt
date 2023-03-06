@@ -6,4 +6,4 @@
 (define ÷ /)
 
 
-;; define a new syntax for (tensor ...)
+;; define a new syntax for (tensor ...)?

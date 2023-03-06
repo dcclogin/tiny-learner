@@ -1,5 +1,6 @@
 #lang racket
 (require malt)
+(require "../data.rkt")
 
 ;; Slip-slidin' away
 
@@ -18,10 +19,8 @@
         (let ([ys* ((target xs) θ)])
           (sum (sqr (- ys ys*))))))))
 
-(let ([xs (tensor 2.0 1.0 4.0 3.0)]
-      [ys (tensor 1.8 1.2 4.2 3.3)]
-      [θ (list 0.0 0.0)])
-  (let ([obj ((l2-loss line) xs ys)])
+(let ([θ (list 0.0 0.0)])
+  (let ([obj ((l2-loss line) line-xs line-ys)])
     (∇ obj θ)))
 
 
@@ -40,10 +39,8 @@
 
 
 ;; the first "learning" process! (optimization by gradient descent)
-(let ([α 0.01]
-      [xs (tensor 2.0 1.0 4.0 3.0)]
-      [ys (tensor 1.8 1.2 4.2 3.3)])
-  (let ([obj ((l2-loss line) xs ys)])
+(let ([α 0.01])
+  (let ([obj ((l2-loss line) line-xs line-ys)])
     (let ([f (λ (θ)
                (let ([gs (∇ obj θ)])
                  (list (- (ref θ 0) (* α (ref gs 0)))
@@ -51,10 +48,8 @@
       (revise f 1000 (list 0.0 0.0)))))
 
 ;; improve f so that it doesn't rely on the length of θ
-(let ([α 0.01]
-      [xs (tensor 2.0 1.0 4.0 3.0)]
-      [ys (tensor 1.8 1.2 4.2 3.3)])
-  (let ([obj ((l2-loss line) xs ys)])
+(let ([α 0.01])
+  (let ([obj ((l2-loss line) line-xs line-ys)])
     (let ([f (λ (θ)
                (let ([gs (∇ obj θ)])
                  (map (λ (p q) (- p (* α q)))
@@ -78,8 +73,6 @@
                       gs)))])
       (revise f revs θ))))
 
-(let ([xs (tensor 2.0 1.0 4.0 3.0)]
-      [ys (tensor 1.8 1.2 4.2 3.3)])
-  (gradient-descent
-   ((l2-loss line) xs ys)
-   (list 0.0 0.0)))
+(gradient-descent
+ ((l2-loss line) line-xs line-ys)
+ (list 0.0 0.0))
