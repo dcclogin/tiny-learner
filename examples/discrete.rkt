@@ -26,10 +26,19 @@
       (revise f revs θ))))
 
 
-;; it can learn θ to be 2.999999999...
+;; it can learn θ to be 3.0 with the following setting:
+(with-hypers
+  ([α 0.5]
+   [revs 1])
+  (gradient-descent
+   ((l2-loss single) single-x single-y)
+   (list 0.0)))
+
+
+;; learn θ to be 2.9999999993888893
 (with-hypers
   ([α 0.1]
-   [revs 1000])
+   [revs 100])
   (gradient-descent
    ((l2-loss single) single-x single-y)
    (list 0.0)))
